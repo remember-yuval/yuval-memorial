@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>לזכרו של יובל שהם</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@300;400;500;700&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* פלטת צבעים חדשה - גווני תכלת וכחול */
+    --sand: #f0f8ff;         /* תכלת בהיר מאוד - רקע כללי */
+    --sand-dark: #d6e8f2;    /* גבולות ורקעים עדינים */
+    --ink: #0a192f;          /* כחול עמוק - טקסט ורקעים כהים */
+    --ink-soft: #1e3a5f;     /* כחול-אפור - טקסט משני */
+    --gold: #007bb5;         /* תכלת חי - כפתורים והדגשות (החליף את הזהב) */
+    --gold-light: #52a8d6;   /* תכלת בהיר להובר */
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Heebo', sans-serif;
+    background: var(--sand);
+    color: var(--ink);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 20px;
+    right: 50%;
+    transform: translateX(50%);
+    z-index: 100;
+    background: rgba(10, 25, 47, 0.9);
+    backdrop-filter: blur(14px);
+    border-radius: 50px;
+    padding: 10px 20px;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    border: 1px solid rgba(0, 123, 181, 0.3);
+    transition: all 0.3s ease;
+    flex-wrap: nowrap;
+  }
+  nav a {
+    font-family: 'Heebo', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: rgba(240, 248, 255, 0.8);
+    text-decoration: none;
+    padding: 8px 14px;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  nav a:hover {
+    color: var(--white);
+    background: rgba(0, 123, 181, 0.2);
+  }
+  nav a.active {
+    color: var(--white);
+    background: var(--gold);
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0, 123, 181, 0.3);
+  }
+  nav .sep {
+    width: 1px;
+    height: 14px;
+    background: rgba(240, 248, 255, 0.2);
+    flex-shrink: 0;
+  }
+
+  /* ── HERO ── */
+  #home {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-image-side {
+    position: relative;
+    background: var(--ink);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .hero-image-placeholder {
+    width: 100%;
+    height: 100%;
+    /* שינוי חשוב כדי שהתמונה לא תיחתך אלא תוצג במלואה */
+    object-fit: contain; 
+    object-position: center top;
+    display: block;
+    background: var(--ink); 
+  }
+  .hero-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to left, var(--sand) 0%, transparent 40%);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .hero-content-side {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 120px 60px 80px 80px;
+    position: relative;
+    z-index: 3;
+  }
+  .hero-year-range {
+    font-size: 13px; letter-spacing: 0.2em; color: var(--gold);
+    text-transform: uppercase; margin-bottom: 20px; font-weight: 500;
+    opacity: 0; animation: fadeUp 0.8s 0.2s forwards;
+  }
+  .hero-name {
+    font-family: 'Frank Ruhl Libre', serif; font-size: clamp(52px, 6vw, 80px);
+    font-weight: 300; line-height: 1.05; color: var(--ink); margin-bottom: 8px;
+    opacity: 0; animation: fadeUp 0.9s 0.35s forwards;
+  }
+  .hero-subtitle {
+    font-family: 'Frank Ruhl Libre', serif; font-size: 18px; font-weight: 300;
+    color: var(--ink-soft); margin-bottom: 48px; font-style: italic;
+    opacity: 0; animation: fadeUp 0.9s 0.5s forwards;
+  }
+  .hero-divider { width: 48px; height: 2px; background: var(--gold); margin-bottom: 36px; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+  .hero-story {
+    font-size: 16.5px; line-height: 1.85; color: var(--ink-soft); max-width: 480px;
+    font-weight: 400; opacity: 0; animation: fadeUp 0.9s 0.75s forwards;
+  }
+  .hero-story p + p { margin-top: 16px; }
+  
+  .hero-contact { margin-top: 48px; opacity: 0; animation: fadeUp 0.9s 0.9s forwards; }
+  .hero-contact-label {
+    font-size: 16px; letter-spacing: 0.05em; color: var(--ink);
+    margin-bottom: 18px; font-weight: 700;
+  }
+  .contact-links { display: flex; gap: 14px; flex-wrap: wrap; }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 28px; border: 1.5px solid var(--gold); border-radius: 4px;
+    color: var(--ink); text-decoration: none; font-size: 15px; font-weight: 500;
+    transition: all 0.25s ease; letter-spacing: 0.03em; background: transparent;
+  }
+  .contact-link:hover { background: var(--gold); color: var(--white); border-color: var(--gold); }
+  .contact-link svg { width: 18px; height: 18px; }
+
+  /* SECTIONS BASE */
+  section, .section-block { padding: 100px 80px; max-width: 1200px; margin: 0 auto; }
+  .section-label { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 16px; font-weight: 700; }
+  .section-title { font-family: 'Frank Ruhl Libre', serif; font-size: clamp(36px, 4vw, 52px); font-weight: 300; color: var(--ink); margin-bottom: 48px; line-height: 1.1; }
+
+  /* FILM */
+  #film { background: var(--ink); max-width: 100%; padding: 100px 0; }
+  #film .inner { max-width: 1200px; margin: 0 auto; padding: 0 80px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  #film .section-label { color: var(--gold-light); }
+  .film-title { font-family: 'Frank Ruhl Libre', serif; font-size: clamp(36px, 4vw, 52px); font-weight: 300; color: var(--white); margin-bottom: 24px; line-height: 1.1; }
+  .film-desc { font-size: 16px; line-height: 1.8; color: rgba(240,248,255,0.7); font-weight: 300; margin-bottom: 36px; }
+  .film-btn {
+    display: inline-flex; align-items: center; gap: 12px; padding: 14px 32px;
+    background: var(--gold); color: var(--white); text-decoration: none;
+    font-size: 15px; font-weight: 500; border-radius: 4px; transition: all 0.25s ease; letter-spacing: 0.05em;
+  }
+  .film-btn:hover { background: var(--gold-light); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+  .film-btn svg { width: 18px; height: 18px; }
+  .film-preview {
+    aspect-ratio: 16/9; background: rgba(255,255,255,0.03); border: 1px solid rgba(82,168,214,0.3);
+    border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-direction: column;
+    gap: 16px; cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden;
+  }
+  .film-preview:hover { border-color: rgba(82,168,214,0.8); background: rgba(255,255,255,0.06); }
+  .play-btn {
+    width: 64px; height: 64px; border: 1px solid rgba(82,168,214,0.5); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;
+  }
+  .film-preview:hover .play-btn { background: rgba(82,168,214,0.2); border-color: var(--gold-light); }
+  .play-btn svg { width: 20px; height: 20px; fill: var(--gold-light); margin-right: -3px; }
+  .film-preview p { color: rgba(82,168,214,0.8); font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; font-weight:500;}
+
+  /* GALLERY */
+  #gallery { background: var(--white); max-width: 100%; padding: 100px 0; }
+  #gallery .inner { max-width: 1200px; margin: 0 auto; padding: 0 80px; }
+  .gallery-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; margin-top: 48px; }
+  .gallery-item {
+    position: relative; overflow: hidden; cursor: pointer;
+    background: var(--ink); border-radius: 4px; aspect-ratio: 1/1;
+    transition: transform 0.3s ease;
+  }
+  .gallery-item:hover { transform: scale(1.02); z-index:2; box-shadow: 0 10px 20px rgba(0,0,0,0.15);}
+  .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0.9; transition: opacity 0.3s; }
+  .gallery-item:hover img { opacity: 1; filter: brightness(1.1); }
+  .gallery-overlay {
+    position: absolute; inset: 0; background: linear-gradient(to top, rgba(10,25,47,0.85) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.3s; display: flex; align-items: flex-end; padding: 14px;
+  }
+  .gallery-item:hover .gallery-overlay { opacity: 1; }
+  .gallery-overlay span { color: var(--white); font-size: 13px; font-weight:500; letter-spacing: 0.02em; }
+  .gallery-placeholder-item {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 8px; color: rgba(255,255,255,0.4); font-size: 12px;
+    background: linear-gradient(135deg, #1e3a5f 0%, #0a192f 100%);
+  }
+  .gallery-placeholder-item svg { width: 28px; height: 28px; stroke: currentColor; fill: none; opacity: 0.6; }
+  
+  .gallery-pagination { display: flex; gap: 8px; margin-top: 40px; align-items: center; justify-content: center; flex-wrap: wrap; }
+  .page-btn {
+    width: 40px; height: 40px; border: 1px solid var(--sand-dark); border-radius: 4px;
+    background: var(--white); cursor: pointer; font-family: 'Heebo', sans-serif; font-weight:500;
+    font-size: 14px; color: var(--ink-soft); transition: all 0.2s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .page-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .page-btn.active { background: var(--gold); color: var(--white); border-color: var(--gold); }
+  .page-btn.arrow { font-size: 18px; }
+  
+  .gallery-upload-btn {
+    margin-top: 32px; display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 28px; background: transparent; border: 1.5px dashed var(--gold);
+    border-radius: 4px; color: var(--ink); font-family: 'Heebo', sans-serif;
+    font-size: 15px; font-weight: 500; cursor: pointer; transition: all 0.25s ease;
+  }
+  .gallery-upload-btn:hover { background: rgba(0,123,181,0.05); }
+
+  /* MEMORIES */
+  #memories { background: var(--sand); }
+  .memories-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+  .memory-card {
+    background: var(--white); border-radius: 4px; padding: 32px;
+    border: 1px solid var(--sand-dark); position: relative;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  }
+  .memory-card::before { content: '"'; font-family: 'Frank Ruhl Libre', serif; font-size: 72px; color: var(--gold); opacity: 0.15; position: absolute; top: 10px; right: 24px; line-height: 1; }
+  .memory-text { font-size: 15.5px; line-height: 1.8; color: var(--ink-soft); font-weight: 400; margin-bottom: 20px; margin-top:10px; }
+  .memory-author { font-size: 13px; letter-spacing: 0.05em; color: var(--gold); font-weight: 700; }
+
+  /* PROJECTS */
+  #projects { background: var(--white); }
+  .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+  .project-card {
+    background: var(--sand); border-radius: 4px; padding: 40px;
+    border: 1px solid var(--sand-dark); transition: all 0.3s ease; position: relative; overflow: hidden;
+  }
+  .project-card::before { content: ''; position: absolute; top: 0; right: 0; width: 4px; height: 0; background: var(--gold); transition: height 0.3s ease; }
+  .project-card:hover::before { height: 100%; }
+  .project-card:hover { transform: translateY(-4px); box-shadow: 0 15px 30px rgba(10,25,47,0.08); }
+  .project-title { font-family: 'Frank Ruhl Libre', serif; font-size: 24px; font-weight: 500; color: var(--ink); margin-bottom: 16px; }
+  .project-desc { font-size: 15.5px; line-height: 1.8; color: var(--ink-soft); font-weight: 400; }
+  
+  .add-card {
+    background: transparent; border: 2px dashed var(--sand-dark); border-radius: 4px; padding: 40px;
+    display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 14px;
+    cursor: pointer; transition: all 0.25s ease; color: var(--ink-soft); font-size: 16px; font-weight:500;
+    font-family: 'Heebo', sans-serif;
+  }
+  .add-card:hover { border-color: var(--gold); color: var(--gold); background: rgba(0,123,181,0.02);}
+  .add-card svg { width: 28px; height: 28px; }
+
+  /* MAP */
+  #map-section { background: var(--sand); }
+  .map-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  #gmap { width: 100%; height: 450px; border-radius: 4px; border: 1px solid var(--sand-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.03);}
+  .map-form { background: var(--white); padding: 40px; border-radius: 4px; border: 1px solid var(--sand-dark); box-shadow: 0 4px 12px rgba(0,0,0,0.03);}
+  .map-entries { margin-top: 32px; display: flex; flex-direction: column; gap: 14px; max-height: 250px; overflow-y: auto; padding-left:10px;}
+  .map-entry { padding: 16px 20px; background: var(--white); border-radius: 4px; border: 1px solid var(--sand-dark); box-shadow: 0 2px 8px rgba(0,0,0,0.02);}
+  .map-entry-place { font-weight: 700; font-size: 15px; color: var(--ink); }
+  .map-entry-note { font-size: 14px; color: var(--ink-soft); margin-top: 6px; line-height: 1.6;}
+  .map-entry-author { font-size: 12px; color: var(--gold); margin-top: 8px; font-weight:500;}
+
+  /* SUBMIT */
+  #submit { background: var(--white); }
+  .submit-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+  .submit-note { display: flex; align-items: flex-start; gap: 14px; padding: 20px; background: rgba(0,123,181,0.05); border-right: 4px solid var(--gold); margin-top: 30px; border-radius: 2px; }
+  .submit-note svg { width: 20px; height: 20px; stroke: var(--gold); flex-shrink: 0; margin-top: 2px; }
+  .submit-note p { font-size: 14.5px; color: var(--ink-soft); margin: 0; font-weight:500; line-height:1.6;}
+  .submit-form { background: var(--sand); padding: 48px; border-radius: 4px; border: 1px solid var(--sand-dark); }
+  .form-group { margin-bottom: 24px; }
+  .form-group label { display: block; font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 8px; }
+  .form-group input, .form-group textarea, .form-group select {
+    width: 100%; padding: 14px 18px; background: var(--white); border: 1px solid var(--sand-dark);
+    border-radius: 4px; font-family: 'Heebo', sans-serif; font-size: 15px; color: var(--ink);
+    transition: border-color 0.2s; outline: none; direction: rtl;
+  }
+  .form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(0,123,181,0.1);}
+  .form-group textarea { resize: vertical; min-height: 120px; line-height: 1.7; }
+  .upload-area {
+    border: 2px dashed var(--sand-dark); border-radius: 4px; padding: 32px;
+    text-align: center; cursor: pointer; transition: all 0.25s; background: var(--white);
+  }
+  .upload-area:hover { border-color: var(--gold); background: rgba(0,123,181,0.02);}
+  .upload-area svg { width: 32px; height: 32px; stroke: var(--gold); margin-bottom: 12px; }
+  .upload-area p { font-size: 14px; color: var(--ink-soft); line-height: 1.6; font-weight:500;}
+  .upload-area span { color: var(--gold); font-weight:400; font-size:13px;}
+  .submit-btn {
+    width: 100%; padding: 16px; background: var(--gold); color: var(--white);
+    border: none; border-radius: 4px; font-family: 'Heebo', sans-serif;
+    font-size: 16px; font-weight:700; cursor: pointer; transition: all 0.25s; margin-top: 10px;
+  }
+  .submit-btn:hover { background: #006699; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,123,181,0.3);}
+
+  /* FOOTER */
+  footer { background: var(--ink); padding: 60px 80px; text-align: center; }
+  footer p { font-size: 16px; color: rgba(240,248,255,0.5); font-weight: 400; }
+  footer .gold-line { width: 60px; height: 2px; background: var(--gold); margin: 20px auto; opacity: 0.6; }
+
+  /* MODALS */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(10,25,47,0.9); z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 20px;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--white); border-radius: 4px; padding: 48px; max-width: 520px; width: 100%;
+    transform: translateY(20px); transition: transform 0.3s; text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal svg { width: 56px; height: 56px; stroke: var(--gold); margin-bottom: 24px; }
+  .modal h3 { font-family: 'Frank Ruhl Libre', serif; font-size: 30px; font-weight: 500; margin-bottom: 16px; color:var(--ink);}
+  .modal p { font-size: 16px; color: var(--ink-soft); line-height: 1.7; margin-bottom: 32px; }
+  .modal-close { padding: 14px 36px; background: var(--ink); color: var(--white); border: none; border-radius: 4px; font-family: 'Heebo', sans-serif; font-size: 15px; font-weight:500; cursor: pointer; transition: background 0.2s; }
+  .modal-close:hover { background: var(--gold); }
+
+  /* UPLOAD MODAL */
+  .upload-modal { max-width: 600px; text-align: right; padding: 40px; }
+  .upload-modal h3 { text-align: center; }
+  #upload-preview { margin-top: 16px; max-width: 100%; max-height: 250px; border-radius: 4px; display: none; border:1px solid var(--sand-dark);}
+
+  /* ANIMATIONS */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    #home { grid-template-columns: 1fr; }
+    .hero-image-side { min-height: 60vh; }
+    .hero-content-side { padding: 60px 32px; }
+    section, .section-block { padding: 70px 32px; }
+    #gallery .inner, #film .inner { padding: 0 32px; }
+    footer { padding: 40px 32px; }
+    nav { top: 10px; padding: 8px 12px; gap: 2px; }
+    nav a { font-size: 12px; padding: 6px 10px; }
+    .gallery-grid { grid-template-columns: repeat(3, 1fr); }
+    .projects-grid, .submit-layout, .map-layout, #film .inner { grid-template-columns: 1fr; gap: 40px; }
+    .memories-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    nav { overflow-x: auto; max-width: 95%; }
+    nav a { font-size: 11px; padding: 6px 8px; }
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <a href="#home" class="nav-link active">בית</a>
+  <div class="sep"></div>
+  <a href="#film" class="nav-link">סרט</a>
+  <div class="sep"></div>
+  <a href="#gallery" class="nav-link">גלריה</a>
+  <div class="sep"></div>
+  <a href="#memories" class="nav-link">לזכרו</a>
+  <div class="sep"></div>
+  <a href="#projects" class="nav-link">פרויקטים</a>
+  <div class="sep"></div>
+  <a href="#map-section" class="nav-link">מטיילים לזכרו</a>
+  <div class="sep"></div>
+  <a href="#submit" class="nav-link">שתפו</a>
+</nav>
+
+<section id="home">
+  <div class="hero-image-side">
+    <img src="c9f86b8d-3e22-4959-9cce-c7951ef0d530.jpg" alt="יובל שהם" class="hero-image-placeholder">
+    <div class="hero-image-overlay"></div>
+  </div>
+  <div class="hero-content-side">
+    <div class="hero-year-range">1998 — 2024</div>
+    <h1 class="hero-name">יובל<br>שהם</h1>
+    <p class="hero-subtitle">לוחם, חבר, אח — לנצח בלבנו</p>
+    <div class="hero-divider"></div>
+    <div class="hero-story">
+      <p>יובל אהובנו היה איש ענק בכל המובנים, עם לב עצום - איש של חיים, אהבה ואנשים. יובל היה ערכי וממלכתי, איש ספר ואינטלקטואל גדול. הוא אהב ללמוד, לאכול, לחבק, לצחוק, לטייל ולשמוח.</p>
+      <p>יובל נולד וגדל בירושלים. לאחר מכינה קדם צבאית התגייס לשריון ומצא בית בפלוגת "להב" שבגדוד 9. הוא נפל בקרב במחנה הפליטים ג'באליה במהלך מלחמת חרבות ברזל.</p>
+      <p>אתר זה הוקם על ידי משפחתו וחבריו — כדי שהאור, החיוך והערכים שלו ימשיכו ללוות אותנו.</p>
+    </div>
+    <div class="hero-contact">
+      <p class="hero-contact-label">יצירת קשר עם המשפחה</p>
+      <div class="contact-links">
+        <a href="mailto:azs1998@gmail.com" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          דוא"ל
+        </a>
+        <a href="https://facebook.com" target="_blank" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg>
+          פייסבוק
+        </a>
+        <a href="https://instagram.com" target="_blank" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          אינסטגרם
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="film">
+  <div class="inner">
+    <div class="reveal">
+      <p class="section-label">סרט לזכרו</p>
+      <h2 class="film-title">רגעים<br>שנשארים</h2>
+      <p class="film-desc">סרט ההנצחה שהופק על ידי משפחתו וחבריו הקרובים של יובל. בסרט ניתן לשמוע את קולו, לראות את החיוך שלא יורד מהפנים, ולהיזכר ברגעים הקטנים שעשו אותו למי שהוא.</p>
+      <a href="#" class="film-btn" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        צפייה בסרט
+      </a>
+    </div>
+    <div class="film-preview reveal" onclick="window.open('#','_blank')">
+      <div class="play-btn">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      </div>
+      <p>לחצו לצפייה</p>
+    </div>
+  </div>
+</div>
+
+<div id="gallery">
+  <div class="inner">
+    <div class="reveal">
+      <p class="section-label">זיכרונות בתמונות</p>
+      <h2 class="section-title">גלריה</h2>
+    </div>
+    <div class="gallery-grid reveal" id="gallery-grid"></div>
+    <div class="gallery-pagination reveal" id="gallery-pagination"></div>
+    <div style="margin-top:24px" class="reveal">
+      <button class="gallery-upload-btn" onclick="openUploadModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>
+        הוספת תמונה לגלריה
+      </button>
+    </div>
+  </div>
+</div>
+
+<section id="memories">
+  <div class="reveal">
+    <p class="section-label">דברים לזכרו</p>
+    <h2 class="section-title">מה שנשמר בלב</h2>
+  </div>
+  <div class="memories-grid reveal" id="memories-grid">
+    <div class="memory-card">
+      <p class="memory-text">יובל היה הסוג של אדם שאף פעם לא שכח ליום הולדת, תמיד הגיע עם חיוך ובלון. החיבוק הענק שלו יחסר לי לנצח. זכרון ממנו ישאר איתי לכל החיים.</p>
+      <p class="memory-author">— דנה כהן, חברה מהתיכון</p>
+    </div>
+    <div class="memory-card">
+      <p class="memory-text">כשהיינו בסיור, יובל תמיד ידע להצביע על פרט קטן בנוף שאף אחד לא ראה. הוא אהב את הארץ הזאת כל כך, והכיר כל שביל. סרס"פ שדאג לנו כמו אבא.</p>
+      <p class="memory-author">— אריאל לוי, חבר מפלוגת להב</p>
+    </div>
+    <div class="memory-card">
+      <p class="memory-text">אחי שלי, הגדול מכולם בלב. איש של ספר ואינטלקטואל, שתמיד ידע למצוא את המילים הנכונות. אתה תמיד תהיה שם בכל צעד שאני עושה.</p>
+      <p class="memory-author">— עדי שהם, אחות</p>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="reveal">
+    <p class="section-label">ממשיכים את דרכו</p>
+    <h2 class="section-title">פרויקטים ויוזמות</h2>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card reveal">
+      <h3 class="project-title">הספרייה של יובל</h3>
+      <p class="project-desc">פינת לימוד ודף שבועי המוקדשים לערכים שאהב מתוך המכינה ומדרשת עין פרת. מקום של רוח והגות לחברים ומשפחה.</p>
+      <p class="project-date">הוקם ינואר 2025</p>
+    </div>
+    <div class="project-card reveal">
+      <h3 class="project-title">ספסל הזיכרון בירושלים</h3>
+      <p class="project-desc">ספסל לזכרו של יובל הוקם בשכונת בקעה, המקום שבו גדל וכל כך אהב, עם ציטוט שאהב במיוחד.</p>
+      <p class="project-date">הוקם מרץ 2025</p>
+    </div>
+    <div class="project-card reveal">
+      <h3 class="project-title">פרויקט "עושים טוב"</h3>
+      <p class="project-desc">מיזם מעשים טובים וסיוע מטעם פלוגת להב, לזכרו של הסרס"פ שדאג לכולם ותמיד שם את האחר לפניו.</p>
+      <p class="project-date">אפריל 2025</p>
+    </div>
+    <button class="add-card reveal" onclick="openProjectModal()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m8-8H4"/></svg>
+      יש לכם רעיון לפרויקט הנצחה?<br>לחצו כאן
+    </button>
+  </div>
+</section>
+
+<section id="map-section">
+  <div class="reveal">
+    <p class="section-label">מסלולים וטבע</p>
+    <h2 class="section-title">מטיילים לזכרו</h2>
+  </div>
+  <div class="map-layout reveal">
+    <div>
+      <div id="gmap"></div>
+      <div class="map-entries" id="map-entries"></div>
+    </div>
+    <div class="map-form">
+      <p style="font-size:16px;line-height:1.8;color:var(--ink-soft);font-weight:400;margin-bottom:24px;">
+        יובל היה איש של אדמה וטבע. יצאתם לטייל במסלול שאהב? ביקרתם בנקודה לזכרו? ספרו לנו ונוסיף סיכה למפה שלו.
+      </p>
+      <div class="form-group">
+        <label>שמך</label>
+        <input type="text" id="map-name" placeholder="שמך המלא">
+      </div>
+      <div class="form-group">
+        <label>איפה טיילתם?</label>
+        <input type="text" id="map-place" placeholder="לדוגמה: שביל ישראל, שמורת עין גדי...">
+      </div>
+      <div class="form-group">
+        <label>כמה מילים מהטיול</label>
+        <textarea id="map-note" rows="3" placeholder="על מה חשבתם בדרך? איזה שיר שמעתם?"></textarea>
+      </div>
+      <button class="submit-btn" onclick="addMapEntry()">הוספת נקודה למפה</button>
+    </div>
+  </div>
+</section>
+
+<section id="submit">
+  <div class="submit-layout">
+    <div class="reveal">
+      <p class="section-label">בואו נזכור ביחד</p>
+      <h2 class="section-title">שתפו זיכרון</h2>
+      <p style="font-size:16.5px;line-height:1.8;color:var(--ink-soft);font-weight:400;margin-bottom:16px;">
+        האתר הזה שייך לכל מי שהכיר ואהב את יובל. אם ברצונכם לשתף זיכרון, סיפור קטן מהצבא או מהמכינה, או כל דבר שתרצו שישמר כאן — נשמח לקרוא.
+      </p>
+      <div class="submit-note">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <p>כל תוכן שיישלח יעבור למייל של המשפחה. לאחר אישורכם ואישור המשפחה, נוכל לפרסם אותו כאן באתר.</p>
+      </div>
+    </div>
+    <form class="submit-form reveal" onsubmit="handleSubmit(event, 'memory')">
+      <div class="form-group">
+        <label>שם מלא</label>
+        <input type="text" id="sub-name" placeholder="השם שלך" required>
+      </div>
+      <div class="form-group">
+        <label>כתובת דוא"ל</label>
+        <input type="email" id="sub-email" placeholder="your@email.com" required>
+      </div>
+      <div class="form-group">
+        <label>מילים ליובל</label>
+        <textarea id="sub-message" placeholder="שתפו זיכרון, מחשבה, או כל דבר שתרצו..." required></textarea>
+      </div>
+      <button type="submit" class="submit-btn">שליחה למשפחה</button>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <p style="font-family:'Frank Ruhl Libre',serif;font-size:26px;color:rgba(255,255,255,0.9);font-weight:400;">יובל שהם</p>
+  <div class="gold-line"></div>
+  <p>זיכרונו לברכה · 2002–2024</p>
+</footer>
+
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal('modal')">
+  <div class="modal">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+    <h3>תודה רבה</h3>
+    <p>פנייתך התקבלה ונשלחה. המשפחה תיצור איתך קשר בהקדם לאחר קריאת התוכן.</p>
+    <button class="modal-close" onclick="closeModal('modal')">סגור</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="upload-modal" onclick="if(event.target===this)closeModal('upload-modal')">
+  <div class="modal upload-modal">
+    <h3 style="margin-bottom:24px; color:var(--ink);">העלאת תמונה לגלריה</h3>
+    <form onsubmit="handleSubmit(event,'gallery')">
+      <div class="form-group">
+        <label>שמך</label>
+        <input type="text" id="up-name" placeholder="שמך המלא" required>
+      </div>
+      <div class="form-group">
+        <label>תיאור קצר של התמונה</label>
+        <textarea id="up-desc" rows="3" placeholder="מתי צולם? איפה? מי מופיע בתמונה?" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>בחירת תמונה</label>
+        <div class="upload-area" onclick="document.getElementById('up-file').click()">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+          <p>לחצו להעלאת תמונה<br><span>JPG, PNG עד 10MB</span></p>
+        </div>
+        <input type="file" id="up-file" style="display:none" accept="image/*" onchange="previewUpload(this)">
+        <img id="upload-preview" alt="תצוגה מקדימה">
+      </div>
+      <button type="submit" class="submit-btn">שליחה לאישור</button>
+    </form>
+    <button class="modal-close" style="margin-top:12px;width:100%; background:transparent; color:var(--ink); border:2px solid var(--sand-dark);" onclick="closeModal('upload-modal')">ביטול</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="project-modal" onclick="if(event.target===this)closeModal('project-modal')">
+  <div class="modal upload-modal">
+    <h3 style="margin-bottom:24px; color:var(--ink);">הצעת פרויקט הנצחה</h3>
+    <form onsubmit="handleSubmit(event,'project')">
+      <div class="form-group">
+        <label>שם היזם / אחראי</label>
+        <input type="text" id="proj-name" placeholder="שמך המלא" required>
+      </div>
+      <div class="form-group">
+        <label>שם הפרויקט</label>
+        <input type="text" id="proj-title" placeholder="למשל: תרומת ספרים למכינה..." required>
+      </div>
+      <div class="form-group">
+        <label>תיאור הפרויקט</label>
+        <textarea id="proj-desc" rows="4" placeholder="ספרו לנו על הרעיון להנצחה..." required></textarea>
+      </div>
+      <div class="form-group">
+        <label>דוא"ל לחזרה</label>
+        <input type="email" id="proj-email" placeholder="your@email.com" required>
+      </div>
+      <button type="submit" class="submit-btn">שליחה למשפחה</button>
+    </form>
+    <button class="modal-close" style="margin-top:12px;width:100%; background:transparent; color:var(--ink); border:2px solid var(--sand-dark);" onclick="closeModal('project-modal')">ביטול</button>
+  </div>
+</div>
+
+<script>
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => observer.observe(el));
+
+// ── NAV ACTIVE ──
+const sections = ['home','film','gallery','memories','projects','map-section','submit'];
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+  let current = 'home';
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el && window.scrollY >= el.offsetTop - 250) {
+        current = id;
+    }
+  });
+  navLinks.forEach(a => {
+    a.classList.remove('active');
+    if (a.getAttribute('href') === '#' + current) {
+        a.classList.add('active');
+    }
+  });
+});
+
+// ── GALLERY DATA (30 IMAGES) ──
+const galleryData = [];
+const baseLabels = ['יובל במסלול','מדרשת עין פרת','עם הפלוגה','החיוך שתמיד שם','שבת בירושלים','עם החברים לצוות','רגעי שקט','טיול במדבר','המכינה'];
+for (let i = 1; i <= 30; i++) {
+  galleryData.push({ label: baseLabels[(i-1) % baseLabels.length] + ' (' + i + ')' });
+}
+
+const PER_PAGE = 10;
+let currentPage = 1;
+
+function renderGallery(page) {
+  const grid = document.getElementById('gallery-grid');
+  const start = (page - 1) * PER_PAGE;
+  const items = galleryData.slice(start, start + PER_PAGE);
+  
+  grid.innerHTML = items.map((item, idx) => {
+    let extraClass = '';
+    // יצירת מראה א-סימטרי כמו בעיצוב המקורי
+    if (idx === 0 || idx === 7) extraClass = ' tall';
+    if (idx === 4) extraClass = ' wide';
+    
+    return `
+    <div class="gallery-item ${extraClass}">
+      <div class="gallery-placeholder-item">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        <span>תמונה ${start + idx + 1}</span>
+      </div>
+      <div class="gallery-overlay"><span>${item.label}</span></div>
+    </div>`;
+  }).join('');
+  
+  renderPagination(page);
+}
+
+function renderPagination(page) {
+  const totalPages = Math.ceil(galleryData.length / PER_PAGE);
+  const pag = document.getElementById('gallery-pagination');
+  let html = `<button class="page-btn arrow" onclick="goPage(${page-1})" ${page===1?'disabled style="opacity:.3"':''}>&#8250;</button>`;
+  for (let i = 1; i <= totalPages; i++) {
+    html += `<button class="page-btn ${i===page?'active':''}" onclick="goPage(${i})">${i}</button>`;
+  }
+  html += `<button class="page-btn arrow" onclick="goPage(${page+1})" ${page===totalPages?'disabled style="opacity:.3"':''}>&#8249;</button>`;
+  pag.innerHTML = html;
+}
+
+function goPage(p) {
+  const totalPages = Math.ceil(galleryData.length / PER_PAGE);
+  if (p < 1 || p > totalPages) return;
+  currentPage = p;
+  renderGallery(p);
+  document.getElementById('gallery').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+renderGallery(1);
+
+// ── MODALS ──
+function openUploadModal() { document.getElementById('upload-modal').classList.add('open'); }
+function openProjectModal() { document.getElementById('project-modal').classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function previewUpload(input) {
+  const img = document.getElementById('upload-preview');
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => { img.src = e.target.result; img.style.display = 'block'; };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+
+// ── EMAIL HANDLING ──
+async function handleSubmit(e, type) {
+  e.preventDefault();
+  const TO = 'azs1998@gmail.com';
+  let subject = 'הודעה מאתר ההנצחה של יובל שהם - ';
+  let body = '';
+
+  if (type === 'memory') {
+    const name = document.getElementById('sub-name').value;
+    const email = document.getElementById('sub-email').value;
+    const msg = document.getElementById('sub-message').value;
+    subject += 'זיכרון / הקדשה חדשה';
+    body = `שם: ${name}\nמייל: ${email}\n\nהתוכן ששותף:\n${msg}`;
+  } 
+  else if (type === 'gallery') {
+    const name = document.getElementById('up-name').value;
+    const desc = document.getElementById('up-desc').value;
+    subject += 'תמונה חדשה לגלריה';
+    body = `שם השולח: ${name}\nתיאור התמונה:\n${desc}\n\n(נא לצרף את קובץ התמונה להודעת מייל זו)`;
+    closeModal('upload-modal');
+  } 
+  else if (type === 'project') {
+    const name = document.getElementById('proj-name').value;
+    const title = document.getElementById('proj-title').value;
+    const desc = document.getElementById('proj-desc').value;
+    const email = document.getElementById('proj-email').value;
+    subject += 'הצעת פרויקט חדש';
+    body = `שם: ${name}\nמייל: ${email}\nשם הפרויקט: ${title}\n\nתיאור הפרויקט:\n${desc}`;
+    closeModal('project-modal');
+  }
+
+  // פותח את תוכנת המייל של המשתמש
+  const mailto = `mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = mailto;
+  
+  // מציג הודעת הצלחה
+  document.getElementById('modal').classList.add('open');
+  e.target.reset();
+  const preview = document.getElementById('upload-preview');
+  if (preview) preview.style.display = 'none';
+}
+
+// ── MAP ──
+const mapEntries = [
+  { place: 'שכונת בקעה, ירושלים', note: 'עברנו ליד התיכון ונזכרנו בבקרים ההם.', name: 'משפחת שהם' },
+  { place: 'מדרשת עין פרת', note: 'ישבנו ללמוד פרק בספר שהוא אהב.', name: 'חברי המכינה' },
+];
+
+function initMap() {
+  const mapEl = document.getElementById('gmap');
+  // ללא API Key מפה אמיתית לא תעבוד, נציג רקע שמדמה מיקום למפה
+  if (typeof google === 'undefined') {
+    mapEl.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;background:var(--sand-dark);color:var(--ink-soft);font-size:15px;border-radius:4px; font-weight:500;">המפה תוצג כאן (דורש חיבור ל-Google Maps)</div>';
+    renderMapEntries();
+    return;
+  }
+
+  const map = new google.maps.Map(mapEl, {
+    center: { lat: 31.7683, lng: 35.2137 }, // ירושלים
+    zoom: 8,
+    styles: [
+      { featureType: 'all', elementType: 'geometry', stylers: [{ color: '#f0f8ff' }] },
+      { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#d6e8f2' }] },
+      { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#ffffff' }] },
+      { featureType: 'poi', elementType: 'geometry', stylers: [{ color: '#52a8d6' }, {lightness: 20}] },
+    ]
+  });
+  window._map = map;
+  renderMapEntries();
+}
+
+function addMapEntry() {
+  const name = document.getElementById('map-name').value.trim();
+  const place = document.getElementById('map-place').value.trim();
+  const note = document.getElementById('map-note').value.trim();
+  if (!name || !place) return;
+  
+  mapEntries.unshift({ name, place, note });
+  renderMapEntries();
+  
+  document.getElementById('map-name').value = '';
+  document.getElementById('map-place').value = '';
+  document.getElementById('map-note').value = '';
+}
+
+function renderMapEntries() {
+  const el = document.getElementById('map-entries');
+  el.innerHTML = mapEntries.map(e => `
+    <div class="map-entry">
+      <div class="map-entry-place">📍 ${e.place}</div>
+      ${e.note ? `<div class="map-entry-note">${e.note}</div>` : ''}
+      <div class="map-entry-author">— ${e.name}</div>
+    </div>
+  `).join('');
+}
+
+// הפעלת פונקציות טעינה
+initMap();
+</script>
+
+</body>
+</html>
