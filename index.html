@@ -687,14 +687,20 @@
   .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
+  /* Mobile hero elements - hidden on desktop */
+  .hero-mobile-name-row { display: none; }
+  .hero-mobile-social { display: none; }
+  .hero-mobile-subtitle { display: none; }
+  .hero-mobile-divider { display: none; }
+
   /* RESPONSIVE */
   @media (max-width: 900px) {
     #home { grid-template-columns: 1fr; }
-    .hero-image-side { min-height: 60vh; }
-    .hero-content-side { padding: 60px 32px; }
-    section, .section-block { padding: 70px 32px; }
-    #gallery .inner, #film .inner { padding: 0 32px; }
-    footer { padding: 40px 32px; }
+    .hero-image-side { min-height: 50vh; display: none; } /* hide on tablet/mobile — image shown in circle */
+    .hero-content-side { padding: 80px 28px 60px; }
+    section, .section-block { padding: 60px 24px; }
+    #gallery .inner, #film .inner { padding: 0 24px; }
+    footer { padding: 40px 24px; }
     nav { top: 10px; padding: 8px 12px; gap: 2px; }
     nav a { font-size: 12px; padding: 6px 10px; }
     .gallery-grid { grid-template-columns: repeat(3, 1fr); }
@@ -708,16 +714,170 @@
     .library-text .section-title { text-align: center; }
     .compact-form { grid-template-columns: 1fr; }
     .compact-form .span-2 { grid-column: span 1; }
+    
+    /* Submit layout */
+    .submit-form { padding: 28px 20px; }
+    
+    /* Film section */
+    #film { padding: 60px 0; }
+    .film-title { font-size: clamp(28px, 6vw, 40px); }
   }
+  
   @media (max-width: 600px) {
-    nav { overflow-x: auto; max-width: 95%; }
-    nav a { font-size: 11px; padding: 6px 8px; }
-    .gallery-grid { grid-template-columns: repeat(2, 1fr); }
-    .memory-card { flex: 0 0 100%; }
+    /* Nav */
+    nav { overflow-x: auto; max-width: 95%; padding: 6px 10px; gap: 0; }
+    nav a { font-size: 10.5px; padding: 5px 7px; }
+    nav .sep { display: none; }
+    
+    /* Gallery */
+    .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    
+    /* Memory */
+    .memory-card { flex: 0 0 85%; }
     .memories-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .share-btn { width: 100%; justify-content: center; }
+    
+    /* Upload preview */
     .preview-grid { grid-template-columns: repeat(2, 1fr); }
+    
+    /* Hero contact bar */
     .hero-contact-bar { flex-direction: column; align-items: stretch; text-align: center; }
     .hero-contact-bar-links { flex-direction: column; width: 100%; }
+    
+    /* Hero mobile layout */
+    .hero-image-side { display: none !important; }
+    .hero-content-side { padding: 32px 20px 40px; }
+    .hero-name { display: none; }
+    .hero-name-desktop { display: none !important; }
+    .hero-subtitle { display: none; }
+    
+    /* Mobile: vertical centered stack */
+    .hero-mobile-name-row {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      text-align: center;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.35s forwards;
+    }
+    .hero-mobile-circle {
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center center;
+      border: 3px solid var(--gold);
+      box-shadow: 0 4px 18px rgba(0,123,181,0.28);
+      flex-shrink: 0;
+    }
+    .hero-mobile-name-row .hero-name {
+      display: block;
+      font-size: clamp(36px, 9vw, 50px);
+      margin-bottom: 0;
+      opacity: 1;
+      animation: none;
+      white-space: nowrap;
+      text-align: center;
+      line-height: 1.1;
+    }
+    /* Subtitle: between name and social icons */
+    .hero-mobile-subtitle {
+      display: block;
+      font-family: 'Heebo', sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      font-style: italic;
+      color: var(--ink-soft);
+      letter-spacing: 0.04em;
+      text-align: center;
+      margin: 0 0 6px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.45s forwards;
+    }
+    /* Gold divider under subtitle, above social icons */
+    .hero-mobile-divider {
+      display: block;
+      width: 36px;
+      height: 2px;
+      background: var(--gold);
+      border-radius: 2px;
+      margin: 0 auto 16px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s forwards;
+    }
+
+    /* Mobile social links */
+    .hero-mobile-social {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      flex-wrap: nowrap;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.55s forwards;
+      justify-content: center;
+    }
+    .mobile-social-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 10px;
+      border: 1.5px solid var(--sand-dark);
+      border-radius: 20px;
+      color: var(--ink-soft);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 500;
+      font-family: 'Assistant', sans-serif;
+      background: var(--white);
+      white-space: nowrap;
+      flex: 1;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .mobile-social-link:hover, .mobile-social-link:active {
+      background: var(--gold);
+      color: var(--white);
+      border-color: var(--gold);
+    }
+    .mobile-social-link svg {
+      width: 14px; height: 14px; flex-shrink: 0;
+    }
+    
+    /* Hero subtitle — hidden on mobile (shown in name row instead) */
+    .hero-divider { margin: 0 auto 24px; }
+    .hero-story { font-size: 15px; }
+    
+    /* Projects */
+    .project-card { padding: 28px 20px; }
+    
+    /* Library */
+    .library-img img { max-width: 150px; }
+    .bookshelf-row { gap: 4px; }
+    
+    /* Book tooltip on mobile — show on tap */
+    .book-dedication-tooltip {
+      width: 200px;
+      font-size: 12px;
+      padding: 14px 16px;
+    }
+    
+    /* Sections */
+    .section-title { font-size: clamp(28px, 7vw, 40px); margin-bottom: 32px; }
+    
+    /* Footer */
+    footer { padding: 40px 20px; }
+    
+    /* Modal */
+    .modal { padding: 28px 20px; }
+    .upload-modal { padding: 28px 20px; }
+  }
+  
+  @media (max-width: 380px) {
+    nav a { font-size: 9.5px; padding: 4px 5px; }
+    .hero-mobile-circle { width: 60px; height: 60px; }
+    .mobile-social-link { font-size: 11px; padding: 6px 8px; }
   }
 </style>
 </head>
