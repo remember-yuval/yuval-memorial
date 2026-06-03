@@ -345,15 +345,20 @@
     border-radius: 6px;
     padding: 30px 20px 0;
     box-shadow: inset 0 4px 15px rgba(0,0,0,0.03), 0 15px 40px rgba(10,25,47,0.06);
+    overflow: visible;
+  }
+  
+  .bookshelf-clip {
+    /* clip-path clips visually without affecting positioned children's stacking */
+    /* We only need to hide books sliding in/out horizontally */
+    overflow-x: clip;
+    overflow-y: visible;
   }
   
   .bookshelf-track-wrapper {
     position: relative;
-    overflow: hidden;
-    overflow-clip-margin: 0;
-    padding-top: 250px;
-    margin-top: -250px;
-    /* תוקן: ניטרול בעיות RTL בקרוסלה ברמת הדפדפן */
+    padding-top: 260px;
+    margin-top: -260px;
     direction: ltr; 
   }
   
@@ -482,47 +487,10 @@
     font-family: 'Assistant', sans-serif;
   }
 
-  /* עיצוב הטולטיפ */
+  /* עיצוב הטולטיפ - מוסתר לגמרי, JS floating tooltip מטפל בזה */
   .book-dedication-tooltip {
-    position: absolute;
-    bottom: calc(100% + 18px);
-    right: 50%;
-    transform: translateX(50%);
-    width: 240px;
-    background: var(--white);
-    color: var(--ink);
-    padding: 18px 20px;
-    border-radius: 6px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-    font-size: 13px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s, transform 0.2s;
-    z-index: 1000;
-    border: 1px solid var(--sand-dark);
-    text-align: right;
-    line-height: 1.6;
+    display: none !important;
   }
-  .book-dedication-tooltip::after {
-    content: '';
-    position: absolute;
-    top: 100%; right: 50%;
-    transform: translateX(50%);
-    border-width: 8px; border-style: solid;
-    border-color: var(--white) transparent transparent transparent;
-  }
-  .book-item:hover .book-dedication-tooltip { 
-    opacity: 1; 
-    pointer-events: all;
-    transform: translateX(50%) translateY(-5px);
-  }
-
-  .book-item:first-child .book-dedication-tooltip { right: -5px; transform: none; }
-  .book-item:first-child:hover .book-dedication-tooltip { transform: translateY(-5px); }
-  .book-item:first-child .book-dedication-tooltip::after { right: 25px; transform: none; }
-  .book-item:last-child .book-dedication-tooltip { right: auto; left: -5px; transform: none; }
-  .book-item:last-child:hover .book-dedication-tooltip { transform: translateY(-5px); }
-  .book-item:last-child .book-dedication-tooltip::after { right: auto; left: 25px; transform: none; }
 
   /* טופס ההוספה הקומפקטי */
   .compact-form-wrapper {
