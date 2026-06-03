@@ -1043,10 +1043,12 @@
       </div>
     </div>
 
-    <div class="bookshelf-carousel">
+   <div class="bookshelf-carousel">
       <div class="bookshelf-track-wrapper">
-        <div class="bookshelf-track" id="bookshelf-track">
+        <div class="bookshelf-clip">
+          <div class="bookshelf-track" id="bookshelf-track">
           </div>
+        </div>
         <div class="static-shelf"></div>
       </div>
       
@@ -1058,6 +1060,9 @@
     </div>
 
     <div class="compact-form-wrapper">
+      <p style="font-size:13.5px;color:var(--ink-soft);margin-bottom:14px;font-family:'Assistant',sans-serif;text-align:right;line-height:1.6;">
+        רוצים להוסיף ספר לספרייה? מלאו את הפרטים ונשלח בקשה למשפחה — הם יוסיפו אותו לאחר אישור 💙
+      </p>
       <div id="add-book-form" class="compact-form">
         <div class="form-group">
           <input type="text" id="book-name" placeholder="שם הספר (חובה)">
@@ -1071,7 +1076,7 @@
         <div class="form-group span-2">
           <textarea id="book-dedication" placeholder="הקדשה קצרה או למה בחרתם בספר הזה?"></textarea>
         </div>
-        <button type="button" class="submit-btn" onclick="addBook()">הוספת ספר למדף</button>
+        <button type="button" class="submit-btn" onclick="submitBookByEmail()">שליחת הספר למשפחה</button>
       </div>
     </div>
 
