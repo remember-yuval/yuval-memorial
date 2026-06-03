@@ -1400,8 +1400,8 @@ function shelfNav(dir) {
   goShelf(currentShelf + dir); 
 }
 
-// תוקן לחלוטין - פונקציה שעובדת בצד לקוח בלבד בלי לנסות לשלוח טופס אמיתי לשרת
-function addBook() {
+// שליחת ספר למשפחה במייל (במקום הוספה ישירה)
+function submitBookByEmail() {
   const titleInput = document.getElementById('book-name');
   const authorInput = document.getElementById('book-author');
   const dedicationInput = document.getElementById('book-dedication');
@@ -1412,22 +1412,17 @@ function addBook() {
   const dedication = dedicationInput.value.trim();
   const submitter = submitterInput.value.trim();
   
-  // וידוא נתונים מקומי
   if (!title || !author || !submitter) {
     alert("אנא מלאו את כל שדות החובה: שם הספר, מחבר, והשם שלכם.");
     return;
   }
   
-  // מוסיף את הספר למערך
-  libraryBooks.push({ title, author, dedication, submitter });
+  const TO = 'remember.yuval.shoham@gmail.com';
+  const subject = 'הספרייה של יובל – בקשה להוסיף ספר';
+  const body = `שלום,\n\nמישהו ביקש להוסיף ספר לספרייה של יובל:\n\nשם הספר: ${title}\nמחבר: ${author}\nהמלצה/הקדשה: ${dedication || '—'}\nמוגש על ידי: ${submitter}\n\nנא לאשר ולהוסיף לאתר.`;
   
-  // מחשב באיזה מדף (סלייד) הספר החדש נמצא ומעדכן את המדף הנוכחי
-  currentShelf = Math.floor((libraryBooks.length - 1) / BOOKS_PER_SHELF);
+  window.location.href = `mailto:${TO}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   
-  // מרנדר מחדש את הספרייה (יוסיף את הספר וייקח אותנו למדף שלו)
-  renderLibraryCarousel();
-  
-  // מנקה את השדות
   titleInput.value = '';
   authorInput.value = '';
   dedicationInput.value = '';
@@ -1437,6 +1432,90 @@ function addBook() {
 // מפעיל את הספרייה בפעם הראשונה כשהאתר נטען
 renderLibraryCarousel();
 
+// ── FLOATING BOOK TOOLTIP (fixed position - never clipped by any parent) ──
+const floatingTooltip = document.createElement('div');
+floatingTooltip.id = 'floating-book-tooltip';
+floatingTooltip.style.cssText = `
+  position:fixed;z-index:99999;width:240px;
+  background:#fff;color:#0a192f;padding:18px 20px;border-radius:6px;
+  box-shadow:0 15px 35px rgba(0,0,0,0.18);font-size:13px;
+  border:1px solid #d6e8f2;text-align:right;line-height:1.6;
+  pointer-events:none;opacity:0;transition:opacity 0.18s;
+  font-family:'Assistant',sans-serif;direction:rtl;
+`;
+document.body.appendChild(floatingTooltip);
+
+function showBookTooltip(book) {
+  const b = book._bookData;
+  if (!b) return;
+  floatingTooltip.innerHTML = `
+    <div style="font-family:'Cormorant Garamond',serif;font-size:15px;color:#007bb5;margin-bottom:5px;font-weight:500;line-height:1.2;">${b.title}</div>
+    <div style="font-size:11px;color:#1e3a5f;margin-bottom:8px;">${b.author}</div>
+    <div style="font-size:12.5px;line-height:1.65;color:#0a192f;">${b.dedication}</div>
+    <div style="margin-top:9px;font-size:11px;color:#007bb5;font-weight:600;">— ${b.submitter}</div>
+    <div style="position:absolute;top:100%;left:50%;transform:translateX(-50%);border:8px solid transparent;border-top-color:#fff;pointer-events:none;" id="ftt-arrow"></div>
+  `;
+
+  const rect = book.getBoundingClientRect();
+  const tw = 240;
+  let left = rect.left + rect.width / 2 - tw / 2;
+  left = Math.max(8, Math.min(left, window.innerWidth - tw - 8));
+  const top = rect.top - 14;
+
+  floatingTooltip.style.left = left + 'px';
+  floatingTooltip.style.top = top + 'px';
+  floatingTooltip.style.transform = 'translateY(calc(-100% - 4px))';
+  floatingTooltip.style.opacity = '1';
+
+  // point arrow at book center
+  const arrowEl = document.getElementById('ftt-arrow');
+  if (arrowEl) {
+    const arrowLeft = (rect.left + rect.width / 2) - left;
+    arrowEl.style.left = Math.max(16, Math.min(tw - 16, arrowLeft)) + 'px';
+    arrowEl.style.transform = 'translateX(-50%)';
+  }
+}
+
+function hideBookTooltip() {
+  floatingTooltip.style.opacity = '0';
+}
+
+function attachBookTooltipEvents() {
+  document.querySelectorAll('.book-item').forEach((el, i) => {
+    el._bookData = libraryBooks[i] || null;
+    // remove old listeners by cloning — but simpler: use a flag
+    if (el._tooltipBound) return;
+    el._tooltipBound = true;
+    el.addEventListener('mouseenter', () => showBookTooltip(el));
+    el.addEventListener('mouseleave', hideBookTooltip);
+    el.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      const wasOpen = el._tooltipOpen;
+      document.querySelectorAll('.book-item').forEach(b => b._tooltipOpen = false);
+      hideBookTooltip();
+      if (!wasOpen) { el._tooltipOpen = true; showBookTooltip(el); }
+    }, { passive: false });
+  });
+}
+
+// Run after initial render
+attachBookTooltipEvents();
+
+// Re-attach after shelf navigation (after animation)
+const _origGoShelf = goShelf;
+goShelf = function(idx, animate = true) {
+  hideBookTooltip();
+  _origGoShelf(idx, animate);
+  setTimeout(attachBookTooltipEvents, 500);
+};
+
+window.addEventListener('scroll', hideBookTooltip, { passive: true });
+document.addEventListener('touchstart', (e) => {
+  if (!e.target.closest('.book-item')) {
+    hideBookTooltip();
+    document.querySelectorAll('.book-item').forEach(b => b._tooltipOpen = false);
+  }
+});
 // ── UPLOAD MODALS ──
 let selectedUploadFiles = [];
 
