@@ -970,10 +970,10 @@
     .memory-card { flex: 0 0 calc(50% - 12px); }
     .projects-grid, .submit-layout, #film .inner { grid-template-columns: 1fr; gap: 40px; }
     .projects-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
-    .project-detail-modal { grid-template-columns: 1fr; max-height: 92vh; }
-    .project-detail-img-side { min-height: 220px; }
+    .project-detail-modal { grid-template-columns: 1fr; max-height: 92vh; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .project-detail-img-side { min-height: 220px; max-height: 280px; }
     .project-detail-img-placeholder { min-height: 220px; }
-    .project-detail-content-side { padding: 32px 28px; max-height: unset; }
+    .project-detail-content-side { padding: 32px 28px; max-height: unset; overflow-y: unset; }
     .lightbox-nav { font-size: 30px; padding: 10px; }
     .lightbox-prev { left: 0px; }
     .lightbox-next { right: 0px; }
@@ -1119,9 +1119,44 @@
     
     /* Projects */
     .project-card { padding: 0; }
-    .projects-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
-    .project-detail-modal { grid-template-columns: 1fr; }
-    .project-detail-content-side { padding: 24px 20px; }
+    .projects-grid { grid-template-columns: 1fr; gap: 16px; }
+    .project-card-image { height: 200px; }
+    
+    /* Project detail modal — mobile full-screen scroll */
+    .project-detail-overlay { padding: 0; align-items: flex-end; }
+    .project-detail-modal {
+      grid-template-columns: 1fr;
+      max-height: 92vh;
+      border-radius: 18px 18px 0 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+      max-width: 100%;
+    }
+    .project-detail-img-side {
+      min-height: 220px;
+      max-height: 260px;
+    }
+    .project-detail-img-side img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .project-detail-content-side {
+      padding: 24px 20px 36px;
+      max-height: unset;
+      overflow-y: unset;
+    }
+    .project-detail-close {
+      top: 12px;
+      left: 12px;
+      width: 32px;
+      height: 32px;
+      font-size: 18px;
+      background: rgba(255,255,255,0.85);
+      border-color: rgba(255,255,255,0.5);
+    }
     
     /* Library */
     .library-img img { max-width: 150px; }
@@ -1149,6 +1184,55 @@
     nav a { font-size: 9.5px; padding: 4px 5px; }
     .hero-mobile-circle { width: 60px; height: 60px; }
     .mobile-social-link { font-size: 11px; padding: 6px 8px; }
+  }
+
+  /* iPhone 13 and similar (390px wide) */
+  @media (max-width: 430px) {
+    /* Ensure project cards stack to 1 column */
+    .projects-grid { grid-template-columns: 1fr !important; gap: 16px; }
+    .project-card-image { height: 220px; }
+    
+    /* Project detail: bottom-sheet style, fully scrollable */
+    .project-detail-overlay {
+      padding: 0;
+      align-items: flex-end;
+    }
+    .project-detail-modal {
+      border-radius: 20px 20px 0 0;
+      max-height: 95vh;
+      width: 100%;
+      max-width: 100%;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      display: flex;
+      flex-direction: column;
+      grid-template-columns: unset;
+    }
+    .project-detail-img-side {
+      min-height: 200px;
+      max-height: 240px;
+      flex-shrink: 0;
+      width: 100%;
+    }
+    .project-detail-img-side img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .project-detail-content-side {
+      padding: 20px 18px 40px;
+      max-height: unset;
+      overflow-y: unset;
+      flex: 1;
+    }
+    .project-detail-title {
+      font-size: clamp(20px, 5.5vw, 28px);
+    }
+    .project-detail-desc {
+      font-size: 15px;
+      line-height: 1.75;
+    }
   }
 </style>
 </head>
